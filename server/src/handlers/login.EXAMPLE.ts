@@ -1,29 +1,76 @@
-import { Assert } from '@assert';
-import { UserModel } from '@models/user.EXAMPLE';
-import { RequestHandler } from 'express';
-import { AuthLoginRequest, AuthLoginResponse } from 'src/interfaces/login.EXAMPLE';
+import { RequestHandler, Request, Response, NextFunction } from 'express';
+import { Strategy as MicrosoftStrategy } from 'passport-microsoft';
+import passport, { DoneCallback } from 'passport';
+import { AuthLoginRequest, AuthLoginResponse, AuthStatusResponse, MicrosoftUserProfile } from 'src/interfaces/login';
 
-function isPasswordCorrect(reqPassword: string, passwordHash: string): boolean {
-  // some implementation here...
-  return true;
+const TENANT_ID = process.env.TENANT_ID;
+const CLIENT_ID = process.env.CLIENT_ID;
+const CLIENT_SECRET = process.env.CLIENT_SECRET;
+const CALLBACK_URL = process.env.CALLBACK_URL;
+
+
+passport.use(new MicrosoftStrategy({
+  clientID: CLIENT_ID,
+  clientSecret: CLIENT_SECRET,
+  callbackURL: CALLBACK_URL || 'http://localhost:3000/api/auth/login',
+  scope: ['user.read'],
+  tenant: process.env.TENANT_ID, // This restricts to a specific tenant
+  authorizationURL: `https://login.microsoftonline.com/${TENANT_ID}/oauth2/v2.0/authorize`,
+  tokenURL: `https://login.microsoftonline.com/${TENANT_ID}/oauth2/v2.0/token`
+},
+function(accessToken: string, refreshToken: string, profile: MicrosoftUserProfile, done: DoneCallback) {
+  return done(null, profile);
 }
+));
 
-export const loginHandler: RequestHandler<null, AuthLoginResponse, AuthLoginRequest> = async (req, res) => {
-  // validate all required args exist
-  if (new Assert(res, req.body, 'email').exists().isString().minLength(6).maxLength(256).isFailed) return;
-  if (new Assert(res, req.body, 'password').exists().isString().minLength(8).isFailed) return;
+passport.serializeUser((user: MicrosoftUserProfile, done: DoneCallback) => {
+  done(null, user);
+});
 
-  const { email, password } = req.body;
+passport.deserializeUser((user: MicrosoftUserProfile, done: DoneCallback) => {
+  done(null, user);
+});
 
-  // find user and verify their password
-  const user = await UserModel.findByEmail(email);
+export const loginHandler: RequestHandler = (req, res, next) => {
+  if (!req.query.code) {
+    passport.authenticate('microsoft')(req, res, next);
+  } else {
+    passport.authenticate('microsoft', {
+      failureRedirect: '/api/auth/login-failed',
+      failureMessage: true
+    })(req, res, (err: any) => {
+      if (err) {
+        return next(err);
+      }
+      res.redirect('http://localhost:4200/'); // redirect to the client
+    });
+  }
+};
 
-  if (!user || !isPasswordCorrect(password, user.password)) {
-    res.status(400).json({ success: false, error: 'WRONG_EMAIL_OR_PASSWORD' });
-    return;
+export const statusHandler: RequestHandler<null, AuthStatusResponse, unknown> = (req, res) => {
+  if (req.isAuthenticated()) {
+    return res.status(200).json({
+      isAuthenticated: true,
+      user: {
+        id: req.user?.id,
+        displayName: req.user?.displayName,
+        email: req.user?._json.mail!
+      }
+    });
   }
 
-  await UserModel.updateLastLogin(user.id);
-
-  res.status(200).json({ success: true, user: { email, username: user.username } });
+  res.status(200).json({ isAuthenticated: false });
 };
+
+export const logoutHandler: RequestHandler = (req, res, next) => {
+  req.logout((err: Error) => {
+    if (err) {
+      return next(err);
+    }
+    res.redirect('http://localhost:4200/login');
+  });
+};
+
+
+
+
