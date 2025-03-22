@@ -5,7 +5,7 @@ import 'dotenv/config';
 import express from 'express';
 import session from 'express-session';
 import passport from 'passport';
-import { authRouter } from './routers/auth.EXAMPLE';
+import { authRouter } from './routers/auth';
 import { clientRouter } from './routers/client';
 import { OK_STR } from './utils/console-colors';
 

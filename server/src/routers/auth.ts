@@ -1,5 +1,5 @@
 
-import { loginHandler, logoutHandler, statusHandler } from '@handlers/login.EXAMPLE';
+import { loginHandler, logoutHandler, statusHandler } from '@handlers/login';
 import { Router, Request, Response } from 'express';
 
 const router = Router();
