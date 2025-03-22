@@ -1,7 +1,8 @@
-import { RequestHandler, Request, Response, NextFunction } from 'express';
-import { Strategy as MicrosoftStrategy } from 'passport-microsoft';
+import { RequestHandler } from 'express';
 import passport, { DoneCallback } from 'passport';
-import { AuthLoginRequest, AuthLoginResponse, AuthStatusResponse, MicrosoftUserProfile } from 'src/interfaces/login';
+import { Strategy as MicrosoftStrategy } from 'passport-microsoft';
+import { APP_URL } from 'src';
+import { AuthStatusResponse, MicrosoftUserProfile } from 'src/interfaces/login';
 
 const TENANT_ID = process.env.TENANT_ID;
 const CLIENT_ID = process.env.CLIENT_ID;
@@ -14,7 +15,7 @@ passport.use(new MicrosoftStrategy({
   clientSecret: CLIENT_SECRET,
   callbackURL: CALLBACK_URL || 'http://localhost:3000/api/auth/login',
   scope: ['user.read'],
-  tenant: process.env.TENANT_ID, // This restricts to a specific tenant
+  tenant: process.env.TENANT_ID,
   authorizationURL: `https://login.microsoftonline.com/${TENANT_ID}/oauth2/v2.0/authorize`,
   tokenURL: `https://login.microsoftonline.com/${TENANT_ID}/oauth2/v2.0/token`
 },
@@ -42,7 +43,7 @@ export const loginHandler: RequestHandler = (req, res, next) => {
       if (err) {
         return next(err);
       }
-      res.redirect('http://localhost:4200/'); // redirect to the client
+      res.redirect(APP_URL); // redirect to the client
     });
   }
 };
@@ -67,7 +68,7 @@ export const logoutHandler: RequestHandler = (req, res, next) => {
     if (err) {
       return next(err);
     }
-    res.redirect('http://localhost:4200/login');
+    res.redirect('http://localhost:4200/api/auth/login');
   });
 };
 

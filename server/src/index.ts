@@ -5,15 +5,12 @@ import 'dotenv/config';
 import express from 'express';
 import session from 'express-session';
 import passport from 'passport';
-import { Strategy as MicrosoftStrategy } from 'passport-microsoft';
-import { connectToDb } from './db';
-import './dotenv-type';
 import { authRouter } from './routers/auth.EXAMPLE';
 import { clientRouter } from './routers/client';
 import { OK_STR } from './utils/console-colors';
 
 const PORT = process.env.PORT ?? 8080;
-
+export const APP_URL = process.env.APP_URL;
 const app = express();
 
 // Middleware
@@ -30,7 +27,7 @@ app.use(session({
     maxAge: 24 * 60 * 60 * 1000 // 24 hours in milliseconds
   }
 }));
-app.use(cors({ credentials: true, origin: process.env.APP_URL }));
+app.use(cors({ credentials: true, origin: APP_URL }));
 app.use(passport.initialize());
 app.use(passport.session());
 
