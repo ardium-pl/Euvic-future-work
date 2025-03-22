@@ -2,7 +2,8 @@ import { RequestHandler } from 'express';
 import passport, { DoneCallback } from 'passport';
 import { Strategy as MicrosoftStrategy } from 'passport-microsoft';
 import { APP_URL } from 'src';
-import { AuthStatusResponse, MicrosoftUserProfile } from 'src/interfaces/login';
+import { MicrosoftUserProfile } from 'src/interfaces/login';
+import { AuthStatusResponse } from '../../shared/interfaces/auth'; 
 
 const TENANT_ID = process.env.TENANT_ID;
 const CLIENT_ID = process.env.CLIENT_ID;
