@@ -29,6 +29,7 @@
       "@directives/*": ["./src/app/directives/*"],
       "@guards/*": ["./src/app/guards/*"],
       "@interceptors/*": ["./src/app/interceptors/*"],
+      "@pages/*": ["./src/app/pages/*"],
       "@shared/*": ["./shared-dist/*"],
     }
   },

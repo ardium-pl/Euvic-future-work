@@ -5,6 +5,7 @@ import 'dotenv/config';
 import express from 'express';
 import session from 'express-session';
 import passport from 'passport';
+import './dotenv-type';
 import { authRouter } from './routers/auth';
 import { clientRouter } from './routers/client';
 import { OK_STR } from './utils/console-colors';
@@ -17,16 +18,18 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(session({
-  secret: process.env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: false,
-  cookie: { 
-    secure: process.env.NODE_ENV === 'production',
-    httpOnly: true,
-    maxAge: 24 * 60 * 60 * 1000 // 24 hours in milliseconds
-  }
-}));
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: process.env.NODE_ENV === 'production',
+      httpOnly: true,
+      maxAge: 1 * 60 * 60 * 1000, // 24 hours in milliseconds
+    },
+  })
+);
 app.use(cors({ credentials: true, origin: APP_URL }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -42,7 +45,7 @@ app.listen(PORT, () => {
 
   try {
     // connectToDb();
-    console.log(`${OK_STR}Connected to database!`);
+    // console.log(`${OK_STR}Connected to database!`);
   } catch (err) {
     throw err;
   }
