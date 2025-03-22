@@ -1,4 +1,4 @@
 node_modules
 dist
-# .env      <-------- UNCOMMENT THIS AFTER COPYING THE TEMPLATE!
+.env 
 seeders
