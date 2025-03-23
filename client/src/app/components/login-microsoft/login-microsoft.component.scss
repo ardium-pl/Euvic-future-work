@@ -1,0 +1,56 @@
+button {
+  height: 5rem;
+  width: 25rem;
+  padding: 0 1.5rem;
+  background-color: var(--ard-bg);
+  border: 1px solid var(--ard-detail-ultralight);
+  border-radius: 0.5rem;
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  --_overlay-opacity: 0;
+  transition: opacity 0.25s ease-in-out;
+
+  &:hover {
+    --_overlay-opacity: 3%;
+  }
+  &:focus-visible {
+    --_overlay-opacity: 12%;
+  }
+  &:active {
+    --_overlay-opacity: 6%;
+  }
+}
+img {
+  height: 2.5rem;
+  position: absolute;
+  left: 1.5rem;
+  transition: opacity 0.2s ease-in-out;
+}
+.text {
+  font-size: 1rem;
+  font-weight: 500;
+}
+.focus-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: var(--ard-overlay);
+  opacity: var(--_overlay-opacity);
+  transition: opacity 0.15s ease-in-out;
+}
+
+:host {
+  &.disabled {
+    pointer-events: none;
+
+    button {
+      opacity: 80%;
+
+      img {
+        opacity: 50%;
+      }
+    }
+  }
+}

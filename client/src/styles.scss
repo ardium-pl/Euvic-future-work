@@ -1,3 +1,6 @@
+@use '../node_modules/@ardium-ui/ui/themes/default/core.scss';
+@use '../node_modules/@ardium-ui/ui/themes/default/spinner.scss';
+
 :root {
   --ard-primary-500: 0, 122, 255;
 }
@@ -18,7 +21,7 @@ body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   position: relative;
-  font-family: "Inter", sans-serif;
+  font-family: 'Inter', sans-serif;
 }
 img,
 picture,
@@ -55,5 +58,11 @@ table {
   border-spacing: 0;
 }
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+}

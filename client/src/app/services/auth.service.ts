@@ -7,7 +7,7 @@ import { HttpService } from './http.service';
 })
 export class AuthService {
   private readonly _http = inject(HttpService);
-  
+
   private readonly _isLoggedIn = signal<boolean>(false);
   public readonly isLoggedIn = this._isLoggedIn.asReadonly();
 
@@ -45,5 +45,17 @@ export class AuthService {
         console.error('Logout failed:', error);
       },
     });
+  }
+
+  private readonly _isLoginLoading = signal<boolean>(false);
+  public readonly isLoginLoading = this._isLoginLoading.asReadonly();
+
+  /**
+   * Sends a login request to the server.
+   */
+  login() {
+    this._isLoginLoading.set(true);
+
+    window.location.href = this._http.apiUrl + 'auth/login';
   }
 }

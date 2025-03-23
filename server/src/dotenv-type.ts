@@ -2,6 +2,7 @@ declare global {
   namespace NodeJS {
     interface ProcessEnv {
       readonly PORT: string;
+      readonly SERVER_URL: string;
       readonly APP_URL: string;
       readonly SESSION_SECRET: string;
       readonly NODE_ENV: 'development' | 'production';

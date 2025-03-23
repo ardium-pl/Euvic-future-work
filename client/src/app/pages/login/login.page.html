@@ -1,1 +1,7 @@
-<p>login works!</p>
+<div class="login-btn">
+  <app-login-microsoft (click)="authService.login()" [disabled]="authService.isLoginLoading()"/>
+  @if (authService.isLoginLoading()) {
+    <ard-spinner />
+  }
+</div>
+<p>Zaloguj się za pomocą swojego firmowego konta Microsoft.</p>

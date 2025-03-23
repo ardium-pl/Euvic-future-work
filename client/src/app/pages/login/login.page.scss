@@ -1,0 +1,19 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
+  justify-content: center;
+  height: calc(100vh - 4rem);
+  height: calc(100dvh - 4rem);
+  padding-bottom: 4rem;
+}
+.login-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+ard-spinner {
+  position: absolute;
+  left: calc(100% + 0.5rem);
+}

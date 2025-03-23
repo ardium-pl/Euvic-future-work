@@ -10,6 +10,7 @@ import { authRouter } from './routers/auth';
 import { clientRouter } from './routers/client';
 import { OK_STR } from './utils/console-colors';
 
+
 const PORT = process.env.PORT ?? 8080;
 export const APP_URL = process.env.APP_URL;
 const app = express();

@@ -9,7 +9,7 @@ export const routes: Routes = [
   {
     path: '_recruiter',
     loadComponent: () => import('./pages/recruiter/recruiter.page').then(v => v.RecruiterPage),
-    canActivate: [isAuthenticatedGuard],
+    canActivate: [isAuthenticatedGuard()],
   },
   {
     path: 'auth/login',
