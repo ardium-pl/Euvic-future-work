@@ -72,6 +72,3 @@ export const logoutHandler: RequestHandler = (req, res, next) => {
     res.clearCookie('connect.sid').redirect(`${APP_URL}/api/auth/login`);
   });
 };
-
-
-
