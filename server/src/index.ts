@@ -5,6 +5,7 @@ import 'dotenv/config';
 import express from 'express';
 import session from 'express-session';
 import passport from 'passport';
+import { connectToDb } from './db';
 import './dotenv-type';
 import { authRouter } from './routers/auth';
 import { clientRouter } from './routers/client';
@@ -45,8 +46,8 @@ app.listen(PORT, () => {
   console.log(`${OK_STR}Running on port ${ansis.greenBright.underline(String(PORT))}!`);
 
   try {
-    // connectToDb();
-    // console.log(`${OK_STR}Connected to database!`);
+    connectToDb();
+    console.log(`${OK_STR}Connected to database!`);
   } catch (err) {
     throw err;
   }
