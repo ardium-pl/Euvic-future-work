@@ -1,0 +1,8 @@
+<div [class]="avatarColorClass()">
+  @if (imageData()) {
+    <img class="avatar" [src]="imageData()" alt="avatar" />
+  } @else {
+    <div class="avatar">{{ initials() }}</div>
+  }
+</div>
+<div class="name">{{ name() }}</div>

@@ -1,3 +1,15 @@
 <header>
-  <img src="Euvic-Future-Work_logo_blue_rgb.png" alt="Euvic Future Work">
+  <img src="Euvic-Future-Work_logo_blue_rgb.png" alt="Euvic Future Work" />
+
+  <!-- @if (authService.userData()?.displayName) { -->
+  <button class="menu-toggle" [matMenuTriggerFor]="menu">
+    <app-avatar-and-name [name]="authService.userData()?.displayName ?? 'Pawel Bakalarz'" />
+  </button>
+  <!-- } -->
 </header>
+
+<mat-menu #menu="matMenu">
+  <button mat-menu-item>
+    <div>Wyloguj</div>
+  </button>
+</mat-menu>
