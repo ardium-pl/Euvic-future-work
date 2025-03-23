@@ -74,6 +74,6 @@ export const logoutHandler: RequestHandler = (req, res, next) => {
     if (err) {
       return next(err);
     }
-    res.redirect('http://localhost:4200/api/auth/login');
+    res.clearCookie('connect.sid').redirect(`${APP_URL}/api/auth/login`);
   });
 };

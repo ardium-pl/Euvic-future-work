@@ -3,7 +3,8 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import 'dotenv/config';
 import express from 'express';
-import session from 'express-session';
+import MySQLStoreCreator from 'express-mysql-session';
+import session, * as expressSession from 'express-session';
 import passport from 'passport';
 import { connectToDb } from './db';
 import './dotenv-type';
@@ -16,22 +17,34 @@ const PORT = process.env.PORT ?? 8080;
 export const APP_URL = process.env.APP_URL;
 const app = express();
 
+const MySQLStore = MySQLStoreCreator(expressSession);
+
+const sessionStore = new MySQLStore({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  port: Number(process.env.DB_PORT),
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DATABASE,
+  clearExpired: true,
+  checkExpirationInterval: 15 * 60 * 1000,
+});
+
+
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      secure: process.env.NODE_ENV === 'production',
-      httpOnly: true,
-      maxAge: 1 * 60 * 60 * 1000, // 24 hours in milliseconds
-    },
-  })
-);
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  store: sessionStore,
+  saveUninitialized: false,
+  cookie: { 
+    secure: process.env.NODE_ENV === 'production',
+    httpOnly: true,
+    maxAge: 1 * 60 * 60 * 1000 // 1 hour
+  }
+}));
 app.use(cors({ credentials: true, origin: APP_URL }));
 app.use(passport.initialize());
 app.use(passport.session());
