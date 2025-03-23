@@ -1,0 +1,21 @@
+:host {
+  width: 100vw;
+  height: calc(100vh - 3.5rem);
+  height: calc(100dvh - 3.5rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 3rem;
+  padding-bottom: 9.5rem;
+}
+
+.text-404 {
+  font-size: 8rem;
+  font-weight: 700;
+  color: rgb(var(--ard-primary-500));
+}
+.not-found {
+  font-weight: 400;
+  font-size: 1.5rem;
+}

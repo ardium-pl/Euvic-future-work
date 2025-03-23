@@ -1,7 +1,5 @@
 :root {
-  --example-variable: 'example value';
-  // define css variables here
-  // remove the above variable after pasting the TEMPLATE
+  --ard-primary-500: 0, 122, 255;
 }
 
 *,
@@ -20,6 +18,7 @@ body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   position: relative;
+  font-family: "Inter", sans-serif;
 }
 img,
 picture,

@@ -7,7 +7,7 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/form/form.page').then(v => v.FormPage),
   },
   {
-    path: 'admin/recruiter',
+    path: '_recruiter',
     loadComponent: () => import('./pages/recruiter/recruiter.page').then(v => v.RecruiterPage),
     canActivate: [isAuthenticatedGuard],
   },
