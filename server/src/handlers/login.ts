@@ -55,6 +55,7 @@ export const loginHandler: RequestHandler = (req, res, next) => {
 };
 
 export const statusHandler: RequestHandler<null, AuthStatusResponse, unknown> = (req, res) => {
+  console.log('req.user', req.user);
   if (req.isAuthenticated()) {
     return res.status(200).json({
       isAuthenticated: true,
