@@ -6,6 +6,7 @@ export interface MicrosoftUserProfile {
     userPrincipalName?: string;
     tid?: string; // Tenant ID
   };
+  photo?: string;
 }
   
 declare global {

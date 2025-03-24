@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { RequestHandler } from 'express';
 import passport, { DoneCallback } from 'passport';
 import { Strategy as MicrosoftStrategy } from 'passport-microsoft';
@@ -22,7 +23,17 @@ passport.use(
       authorizationURL: `https://login.microsoftonline.com/${TENANT_ID}/oauth2/v2.0/authorize`,
       tokenURL: `https://login.microsoftonline.com/${TENANT_ID}/oauth2/v2.0/token`,
     },
-    function (accessToken: string, refreshToken: string, profile: MicrosoftUserProfile, done: DoneCallback) {
+    async function (accessToken: string, refreshToken: string, profile: MicrosoftUserProfile, done: DoneCallback) {
+      const response = await axios.get('https://graph.microsoft.com/v1.0/me/photo/$value', {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        responseType: 'arraybuffer'
+      });
+      if (response.status === 200) {
+        const photoBase64 = response.data.toString('base64');
+        profile.photo = photoBase64;
+      }
       return done(null, profile);
     }
   )
@@ -62,6 +73,7 @@ export const statusHandler: RequestHandler<null, AuthStatusResponse, unknown> = 
         id: req.user?.id,
         displayName: req.user?.displayName,
         email: req.user?._json.mail!,
+        photo: req.user?.photo, 
       },
     });
   }
