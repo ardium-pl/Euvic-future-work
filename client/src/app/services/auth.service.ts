@@ -1,14 +1,14 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { effect, inject, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthStatusResponse, AuthUserInfo } from '@shared/auth';
-import { HttpService } from './http.service';
+import { HttpService, SecureHttpService } from './http.service';
 
-@Injectable({
-  providedIn: 'root',
-})
 export class AuthService {
   private readonly _http = inject(HttpService);
+  private readonly _secureHttp = inject(SecureHttpService);
+  private readonly _router = inject(Router);
 
-  private readonly _isLoggedIn = signal<boolean>(false);
+  private readonly _isLoggedIn = signal<boolean | null>(null);
   public readonly isLoggedIn = this._isLoggedIn.asReadonly();
 
   private readonly _userData = signal<AuthUserInfo | null>(null);
@@ -16,15 +16,29 @@ export class AuthService {
 
   constructor() {
     this.refreshAuthStatus();
+
+    effect(() => {
+      if (this.isLoggedIn() === true) {
+        this._router.navigateByUrl('_recruiter');
+      } else if (this.isLoggedIn() === false) {
+        this._router.navigateByUrl('auth/login');
+      }
+    });
   }
 
   /**
    * Refreshes the authentication status by calling the server.
    */
   refreshAuthStatus(): void {
-    this._http.get<AuthStatusResponse>('/auth/status').subscribe({
+    this._secureHttp.get<AuthStatusResponse>('/auth/status').subscribe({
       next: response => {
         this._isLoggedIn.set(response.isAuthenticated);
+
+        if (response.isAuthenticated) {
+          this._userData.set(response.user);
+        } else {
+          this._userData.set(null);
+        }
       },
       error: error => {
         console.error('Failed to fetch auth status:', error);
@@ -40,6 +54,7 @@ export class AuthService {
     this._http.post('/auth/logout', null).subscribe({
       next: () => {
         this._isLoggedIn.set(false);
+        this._userData.set(null);
       },
       error: error => {
         console.error('Logout failed:', error);
@@ -56,6 +71,6 @@ export class AuthService {
   login() {
     this._isLoginLoading.set(true);
 
-    window.location.href = this._http.apiUrl + 'auth/login';
+    window.location.href = this._secureHttp.apiUrl + 'auth/login';
   }
 }

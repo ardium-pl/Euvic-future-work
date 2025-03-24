@@ -38,7 +38,7 @@ passport.deserializeUser((user: MicrosoftUserProfile, done: DoneCallback) => {
 
 export const loginHandler: RequestHandler = (req, res, next) => {
   const redirectUrl = req.query.redirect as string | undefined;
-  console.log(req.query.code);
+
   if (!req.query.code) {
     passport.authenticate('microsoft')(req, res, next);
   } else {
@@ -55,7 +55,6 @@ export const loginHandler: RequestHandler = (req, res, next) => {
 };
 
 export const statusHandler: RequestHandler<null, AuthStatusResponse, unknown> = (req, res) => {
-  console.log('req.user', req.user);
   if (req.isAuthenticated()) {
     return res.status(200).json({
       isAuthenticated: true,
@@ -75,6 +74,6 @@ export const logoutHandler: RequestHandler = (req, res, next) => {
     if (err) {
       return next(err);
     }
-    res.clearCookie('connect.sid').redirect(`${APP_URL}/api/auth/login`);
+    res.clearCookie('connect.sid').status(200).send();
   });
 };

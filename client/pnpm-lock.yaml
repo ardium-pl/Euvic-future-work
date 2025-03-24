@@ -47,6 +47,9 @@ importers:
       rxjs:
         specifier: ~7.8.0
         version: 7.8.1
+      simple-bool:
+        specifier: ^4.1.0
+        version: 4.1.0
       tslib:
         specifier: ^2.3.0
         version: 2.8.0
@@ -3857,6 +3860,9 @@ packages:
 
   simple-bool@3.1.0:
     resolution: {integrity: sha512-pQYhhdmATwTPoEUcKfydGF+NtHtWZVkBWu0CIKKeO+M6xR9AiICD77V0MYmCPqasvxLKwOPxs/USaS5uCn8wnA==}
+
+  simple-bool@4.1.0:
+    resolution: {integrity: sha512-3ZcveosBw8az/yWFzsqn7O9/SjNsdfnXwoDVmtXQ4MZS5SOujk6YeBzp4P9G4N5TcRQcfm0MpKNI7jz1iWPzRg==}
 
   simple-swizzle@0.2.2:
     resolution: {integrity: sha512-JA//kQgZtbuY83m+xT+tXJkmJncGMTFT+C+g2h2R9uxkYIrE2yy9sgmcLhCnw57/WSD+Eh3J97FPEDFnbXnDUg==}
@@ -8510,6 +8516,8 @@ snapshots:
       - supports-color
 
   simple-bool@3.1.0: {}
+
+  simple-bool@4.1.0: {}
 
   simple-swizzle@0.2.2:
     dependencies:
