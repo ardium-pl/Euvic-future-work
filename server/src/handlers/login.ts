@@ -69,11 +69,21 @@ export const statusHandler: RequestHandler<null, AuthStatusResponse, unknown> = 
   res.status(200).json({ isAuthenticated: false });
 };
 
-export const logoutHandler: RequestHandler = (req, res, next) => {
-  req.logout((err: Error) => {
-    if (err) {
-      return next(err);
-    }
-    res.clearCookie('connect.sid').status(200).send();
+export const logoutHandler: RequestHandler = async (req, res) => {
+  // do passport logout
+  await new Promise<void>(resolve => {
+    req.logout(err => {
+      if (err) throw err;
+      resolve();
+    });
   });
+  // destroy session in db
+  await new Promise<void>(resolve => {
+    req.session.destroy(err => {
+      if (err) throw err;
+      resolve();
+    });
+  });
+
+  res.clearCookie('connect.sid').status(200).json();
 };
